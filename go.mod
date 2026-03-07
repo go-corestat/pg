@@ -1,4 +1,4 @@
-module github.com/RandomBrainCod/go-pg
+module github.com/RandomBrainCode/go-pg
 
 go 1.25.0
 
