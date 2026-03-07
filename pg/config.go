@@ -35,19 +35,20 @@ func DefaultConfig() Config {
 
 func ConfigFromEnv() (Config, error) {
 	cfg := DefaultConfig()
-	cfg.Host = getEnv("POSTGRES_HOST", "localhost")
-	cfg.Port = getEnvInt("POSTGRES_PORT", 5432)
-	cfg.DBName = getEnv("POSTGRES_DB_NAME", "fast")
-	cfg.User = getEnv("POSTGRES_USER", "fast")
-	cfg.Password = getEnv("POSTGRES_PASSWORD", "fastpass")
+	cfg.Host = getEnv("PGHOST", "localhost")
+	cfg.Port = getEnvInt("PGPORT", 5432)
+	cfg.DBName = getEnv("PGDATABASE", "postgres")
+	cfg.User = getEnv("PGUSER", "postgres")
+	cfg.Password = getEnv("PGPASSWORD", "password")
 	cfg.URL = fmt.Sprintf("postgresql://%s:%s@%s:%d/%s?sslmode=disable", cfg.User, cfg.Password, cfg.Host, cfg.Port, cfg.DBName)
-	cfg.MinConns = int32(getEnvInt("POSTGRES_MIN_CONNS", int(cfg.MinConns)))
-	cfg.MaxConns = int32(getEnvInt("POSTGRES_MAX_CONNS", int(cfg.MaxConns)))
-	cfg.MaxConnLifetime = getEnvDuration("POSTGRES_MAX_CONN_LIFETIME", cfg.MaxConnLifetime)
-	cfg.MaxConnIdleTime = getEnvDuration("POSTGRES_MAX_CONN_IDLE_TIME", cfg.MaxConnIdleTime)
-	cfg.ConnectTimeout = getEnvDuration("POSTGRES_CONNECT_TIMEOUT", cfg.ConnectTimeout)
-	cfg.AsyncWorkers = getEnvInt("POSTGRES_ASYNC_WORKERS", 8)
-	cfg.AsyncQueueSize = getEnvInt("POSTGRES_ASYNC_QUEUE", 128)
+
+	cfg.MinConns = int32(getEnvInt("PG_MIN_CONNS", int(cfg.MinConns)))
+	cfg.MaxConns = int32(getEnvInt("PG_MAX_CONNS", int(cfg.MaxConns)))
+	cfg.MaxConnLifetime = getEnvDuration("PG_MAX_CONN_LIFETIME", cfg.MaxConnLifetime)
+	cfg.MaxConnIdleTime = getEnvDuration("PG_MAX_CONN_IDLE_TIME", cfg.MaxConnIdleTime)
+	cfg.ConnectTimeout = getEnvDuration("PG_CONNECT_TIMEOUT", cfg.ConnectTimeout)
+	cfg.AsyncWorkers = getEnvInt("PG_ASYNC_WORKERS", 8)
+	cfg.AsyncQueueSize = getEnvInt("PG_ASYNC_QUEUE", 128)
 
 	if cfg.URL == "" {
 		return Config{}, fmt.Errorf("Missing Postgres URL configuration")
